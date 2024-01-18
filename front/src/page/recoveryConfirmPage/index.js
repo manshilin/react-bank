@@ -1,18 +1,17 @@
-// Import React and necessary components/modules
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
-// Assuming you have a function to handle form submission, update it accordingly
-const handleFormSubmission = () => {
-  // Add your logic here for form submission
-  // After successful submission, navigate to the /balance page
-  navigate('/balance');
-};
 
 // RecoveryConfirmPage component
 const RecoveryConfirmPage = () => {
   const [formData, setFormData] = useState(/* Initial form data state */);
   const navigate = useNavigate();
+
+  // Assuming you have a function to handle form submission, update it accordingly
+  const handleFormSubmission = () => {
+    // Add your logic here for form submission
+    // After successful submission, navigate to the /balance page
+    navigate('/balance');
+  };
 
   return (
     <div>

@@ -1,7 +1,7 @@
 // Import React and necessary components/modules
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from "./container/authContext";
+import { AuthContext } from "../../auth/authContext";
 
 const SignupConfirmPage = () => {
   const { user, confirmUser } = useContext(AuthContext);

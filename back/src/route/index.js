@@ -7,9 +7,9 @@ const path = require('path');
 // ... інші імпорти
 
 // Роут для фронтенду
-router.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../front/build/index.html'));
-});
+// router.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../../front/build/index.html'));
+// });
 
 
 

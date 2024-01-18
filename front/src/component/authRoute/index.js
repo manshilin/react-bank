@@ -1,16 +1,13 @@
+// src/components/AuthRoute/index.js
 
 import React, { useContext } from 'react';
-import { Navigate, Route } from 'react-router-dom';
-import { AuthContext } from "./container/authContext";
+import { Navigate } from 'react-router-dom';
+import { AuthContext } from '../../auth/authContext';
 
-const AuthRoute = ({ element }) => {
+const AuthRoute = ({ children }) => {
   const { token } = useContext(AuthContext);
 
-  return token ? (
-    <Navigate to="/balance" replace />
-  ) : (
-    <Route element={element} />
-  );
+  return token ? children : <Navigate to="/signin" />;
 };
 
 export default AuthRoute;

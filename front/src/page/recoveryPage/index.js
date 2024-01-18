@@ -1,4 +1,7 @@
-// ... інші імпорти ...
+//./src/page/recoveryPage/index.js
+import React from 'react';
+import { AuthContext } from "../../auth/authContext"; 
+import App from "../../App";
 
 function RecoveryPage() {
     const { recoverAccount } = React.useContext(AuthContext);
@@ -26,5 +29,5 @@ function RecoveryPage() {
   
   // ... інший код ...
   
-  export default App;
+  export default RecoveryPage;
   

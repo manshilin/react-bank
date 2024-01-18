@@ -1,6 +1,8 @@
 // Import React and necessary components/modules
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PrivateRoute from '../../component/privateRoute'
+
 
 // Replace the following with the logic to fetch the current balance
 const currentBalance = 1000; // Replace with actual logic
