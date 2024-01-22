@@ -16,6 +16,7 @@ import RecivePage from "./page/recivePage";
 import SendPage from "./page/sendPage";
 import TransactionPage from "./page/transactionPage";
 import Error from "./page/error";
+import Page from "./component/page";
 
 function App() {
   const authContextData = {
@@ -27,23 +28,23 @@ function App() {
   };
 
   return (
+    <Page>
     <AuthContext.Provider value={authContextData}>
       <BrowserRouter>
         <Routes>
-          <Route
-            index
+          <Route path="/"
             element={
-              <AuthRoute>
+             
                 <WellcomePage />
-              </AuthRoute>
+              
             }
           />
           <Route
             path="/signup"
             element={
-              <AuthRoute>
+             
                 <SignupPage />
-              </AuthRoute>
+              
             }
           />
           <Route
@@ -57,9 +58,9 @@ function App() {
           <Route
             path="/signin"
             element={
-              <AuthRoute>
+              
                 <SigninPage />
-              </AuthRoute>
+             
             }
           />
           <Route
@@ -130,6 +131,11 @@ function App() {
       </Routes>
     </BrowserRouter>
   </AuthContext.Provider>
+  </Page>
+  
 );
+
 }
+
+
 export default App;

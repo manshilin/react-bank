@@ -1,104 +1,68 @@
-//напиши код для класу User, для банківського додатку 
-//в якому є такі властивості і методи.
 class User {
-    list = [];
-    constructor(name, surname, email, password, balance, active) {
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.password = password;
-        this.balance = balance;
-        this.active = active;
+    static USER_ROLE = {
+      USER: 1,
+      ADMIN: 2,
+      DEVELOPER: 3,
     }
-    getFullName() {
-        return `${this.name} ${this.surname}`;
+  
+    static #list = []
+  
+    static #count = 1
+  
+    constructor({ email, password, role }) {
+      this.id = User.#count++
+  
+      this.email = String(email).toLowerCase()
+      this.password = String(password)
+      this.role = User.#convertRole(role)
+      this.isConfirm = false
     }
-    getBalance() {
-        return this.balance;
+  
+    static #convertRole = (role) => {
+      role = Number(role)
+  
+      if (isNaN(role)) {
+        role = this.USER_ROLE.USER
+      }
+  
+      role = Object.values(this.USER_ROLE).includes(role)
+        ? role
+        : this.USER_ROLE.USER
+  
+      return role
     }
-    isActive() {
-        return this.active;
+  
+    static create(data) {
+      const user = new User(data)
+  
+      console.log(user)
+  
+      this.#list.push(user)
+  
+      console.log(this.#list)
+  
+      return user
     }
-    setBalance(value) {
-        this.balance = value;
+  
+    static getByEmail(email) {
+      return (
+        this.#list.find(
+          (user) =>
+            user.email === String(email).toLowerCase(),
+        ) || null
+      )
     }
-    setActive(value) {
-        this.active = value;
+  
+    static getById(id) {
+      return (
+        this.#list.find((user) => user.id === Number(id)) ||
+        null
+      )
     }
-    // створи метод який створює користувача і додає його в масив list
-    createUser() {
-        this.list.push({
-            name: this.name,
-            surname: this.surname,
-            email: this.email,
-            password: this.password,
-            balance: this.balance,
-            active: this.active
-        });
-    }
-    // створи метод який поповнює баланс користувача
-    addBalance(value) {
-        this.balance += value;
-    }       
-    // створи метод який переводе грощі іншому корситовачу
-    transferMoney(user, value) {
-        if (this.balance >= value) {
-            this.balance -= value;
-            user.balance += value;
-        }
-    }
-    // створи метод який дозволяє забрати гроші з балансу
-    withdraw(value) {
-        if (this.balance >= value) {
-            this.balance -= value;
-        }
-    }
-    // створи метод який дозволяє деактивувати користувача
-    blockUser() {
-        this.active = false;
-    }
-    // створи метод який дозволяє активувати користувача
-    unblockUser() {
-        this.active = true;
-    }
-    // створи метод який дозволяє поповнити баланс  користувача
-    addBalance(value) {
-        this.balance += value;
-    }
-    // створи метод який перевіряє чи є такий користувач в масиві list
-    checkUser() {
-        for (let i = 0; i < this.list.length; i++) {
-            if (this.list[i].email === this.email) {
-                return true;
-            }
-        }
-        return false;
-    }
-    // створи метод який дозволяє змінити пароль користувачу
-    changePassword(value) {
-        this.password = value;
-    }   
-    // створи метод який дозволяє видалити користувача з масиву list
-    deleteUser() {
-        for (let i = 0; i < this.list.length; i++) {
-            if (this.list[i].email === this.email) {
-                this.list.splice(i, 1);
-            }
-        }
-    }
-    // створи метод який дозволяє вивести всіх користувачів в форматі
-    // Name: ${name} Surname: ${surname} Email: ${email} Password: ${password} Balance: ${balance} Active: ${active}
-    showUsers() {
-        for (let i = 0; i < this.list.length; i++) {
-            console.log(`Name: ${this.list[i].name} Surname: ${this.list[i].surname} Email: ${this.list[i].email} Password: ${this.list[i].password} Balance: ${this.list[i].balance} Active: ${this.list[i].active}`);
-        }
-    }
-    //створи метод переводу грошей з балансу користувача на баланс іншого користувача
-    transferMoney(user, value) {
-        if (this.balance >= value) {
-            this.balance -= value;
-            user.balance += value;
-        }
-    }
-}
-module.exports = User;
+  
+    static getList = () => this.#list
+  }
+  
+  module.exports = {
+    User,
+  }
