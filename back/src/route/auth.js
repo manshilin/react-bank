@@ -4,8 +4,6 @@ const path = require('path');
 
 const { User } = require('../class/user')
 
-
-
   //=====================================================
   
   router.post('/signup', function (req, res) {
@@ -29,13 +27,16 @@ const { User } = require('../class/user')
       }
   
       const newUser = User.create({ email, password})
-      const session = Session.create(newUser)
+      //const session = Session.create(newUser)
   
-      Confirm.create(newUser.email)
+//Confirm.create(newUser.email)
   
       return res.status(200).json({
+        email: newUser.email,
+        password: newUser.password,
+
         message: 'Користувач успішно зареєстрованний',
-        session,
+        //session,
       })
     } catch (err) {
       return res.status(400).json({

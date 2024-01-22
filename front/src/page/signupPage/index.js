@@ -9,13 +9,13 @@ const SignupPage = () => {
     password: '',
   });
 
-  const navigate = useNavigate;
-  const { setAuthData } = useContext(AuthContext);
+  // const navigate = useNavigate;
+  // const { setAuthData } = useContext(AuthContext);
 
   const handleSignup = async () => {
     try {
       // Make an API request for user registration using formData
-      const response = await fetch("http://localhost:4000/sign-up", {
+      const response = await fetch("http://localhost:4000/signup", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,8 +26,8 @@ const SignupPage = () => {
       if (response.ok) {
         const data = await response.json();
         // Assuming the API returns authentication data (e.g., token)
-        setAuthData(data);
-       navigate('/signup-confirm');
+      //   setAuthData(data);
+      //  navigate('/signup-confirm');
        console.log(data)
       } else {
         // Handle registration error
