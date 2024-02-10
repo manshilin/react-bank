@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from './container/authContext';
+import { AuthContext } from './context/authContext';
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({

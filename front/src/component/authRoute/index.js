@@ -1,13 +1,13 @@
 // src/components/AuthRoute/index.js
 
+// AuthRoute.js
 import React, { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
-import { AuthContext } from '../../auth/authContext';
+import { AuthContext } from '../../context/authContext';
 
-const AuthRoute = ({ children }) => {
+const AuthRoute = ({ element }) => {
   const { token } = useContext(AuthContext);
-
-  return token ? children : <Navigate to="/signin" />;
+  return token ? <Navigate to="/balance" /> : element;
 };
 
 export default AuthRoute;

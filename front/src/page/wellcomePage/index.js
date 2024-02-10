@@ -7,6 +7,24 @@ import Button from '../../component/button';
 import './index.css';
 
 const WellcomePage = () => {
+  const [state, setState] = React.useState({
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (event) => {
+    setState({
+      ...state,
+      [event.target.name]: event.target.value,
+    });
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(state);
+  }
+
+
   return (
     <Fragment>
 
@@ -15,18 +33,24 @@ const WellcomePage = () => {
        
       </div>
 
-      <div>
+      
         {/* Button-link to Signup Page */}
-        <Link to="/signup">
+        
+          <div>
+            <Link to="/signup">
           <Button text="Sign Up" className="button" />
         </Link>
       </div>
-      <div>
-        {/* Button-link to Signin Page */}
-        <Link to="/signin">
+      
+          <div>
+            <Link to="/signin">
           <Button text="Sign In" className="button" />
         </Link>
       </div>
+        
+        
+
+        {/* Button-link to Login Page */}
     </Fragment>
   );
 };

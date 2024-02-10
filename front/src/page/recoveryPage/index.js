@@ -1,28 +1,56 @@
 //./src/page/recoveryPage/index.js
-import React from 'react';
-import { AuthContext } from "../../auth/authContext"; 
-import App from "../../App";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/authContext";
+import "./index.css";
 
 function RecoveryPage() {
-    const { recoverAccount } = React.useContext(AuthContext);
+    //const { recoverAccount } = React.useContext(AuthContext);
     const [email, setEmail] = React.useState('');
   
-    const handleRecover = () => {
-      // Логіка для відправки запиту на відновлення акаунту
-      // Можливо, вам також потрібно викликати функцію recoverAccount(email), 
-      //передбачаючи її наявність у вашому контексті
-      // При успішному відновленні переадресувати на /recovery-confirm
-      // Тут вам слід додати код для відправки запиту та обробки відповіді
+    const handleRecover = async () => {
+
+      console.log("Дані для відправлення:", JSON.stringify(email));
+      const response = await fetch("http://localhost:4000/recovery", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({email}),
+      });
+      if (response.ok) {
+      const data = await response.json();
+      console.log("Відповідь від сервера:", data);
+      // Припущено, що API повертає дані про автентифікацію (наприклад, токен)
+      // setAuthData(data);
+      // navigate('/signup-confirm');
+
+      } else {
+        // Обробка помилки реєстрації
+        console.error("Реєстрація не вдалася");
+      }
+
     };
   
     return (
-      <div>
-        <h1>Відновлення акаунту</h1>
-        <label>
-          Email:
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        </label>
-        <button onClick={handleRecover}>Відновити</button>
+      <div className='page'>
+        <h1>Recover password</h1>
+        <p>Choose a recovery method</p>
+        <form>
+        {/* Form fields go here */}
+        <label htmlFor="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          onChange={(e) =>
+            setEmail(
+             e.target.value,
+            )
+          }
+        />
+        </form>
+        
+        <button onClick={handleRecover}>Send code</button>
       </div>
     );
   }

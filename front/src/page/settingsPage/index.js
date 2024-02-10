@@ -1,7 +1,7 @@
 // Import React and necessary components/modules
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AuthContext } from "../../auth/authContext";
+import { AuthContext } from "../../context/authContext";
 
 function SettingsPage() {
   // Retrieve authentication context and update function
