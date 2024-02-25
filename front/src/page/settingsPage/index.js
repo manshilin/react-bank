@@ -1,4 +1,4 @@
-// Import React and necessary components/modules
+// front/src/page/settingsPage/index.js
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from "../../context/authContext";

@@ -1,4 +1,4 @@
-// WelcomePage.jsx
+// front/src/page/wellcomePage/index.js
 import React from 'react';
 import { Fragment } from 'react';
 import { Link } from 'react-router-dom';

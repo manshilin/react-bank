@@ -1,3 +1,4 @@
+// front/src/component/button/index.js
 import "./index.css"
 
 export default function Button({text, type, onClick, className}) {

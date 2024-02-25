@@ -1,4 +1,4 @@
-// Import React and necessary components/modules
+// front/src/page/error/index.js
 import React from 'react';
 import PrivateRoute from "../../component/privateRoute";
 // Define the Error component

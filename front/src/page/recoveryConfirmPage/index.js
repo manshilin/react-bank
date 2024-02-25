@@ -1,3 +1,4 @@
+// front/src/page/recoveryConfirmPage/index.js
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 

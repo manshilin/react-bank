@@ -1,5 +1,5 @@
+// front/src/page/recivePage/index.js
 import React, { useState } from 'react';
-
 function RecivePage() {
   const [amount, setAmount] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('');

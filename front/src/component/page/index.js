@@ -1,3 +1,4 @@
+// front/src/component/page/index.js
 import "./index.css"
 
 export default function Page({children}) {

@@ -1,3 +1,4 @@
+//back/src/class/user.js
 class User {
     static USER_ROLE = {
       USER: 1,
@@ -13,21 +14,17 @@ class User {
       this.role = User.#convertRole(role)
       this.isConfirm = false
     }
-  
     static #convertRole = (role) => {
       role = Number(role)
-  
       if (isNaN(role)) {
         role = this.USER_ROLE.USER
       }
-  
       role = Object.values(this.USER_ROLE).includes(role)
         ? role
         : this.USER_ROLE.USER
   
       return role
     }
-  
     static create(data) {
       const user = new User(data)
       console.log(user)
@@ -35,7 +32,6 @@ class User {
       console.log(this.#list)
       return user
     }
-  
     static getByEmail(email) {
       return (
         this.#list.find(
@@ -44,14 +40,12 @@ class User {
         ) || null
       )
     }
-  
     static getById(id) {
       return (
         this.#list.find((user) => user.id === Number(id)) ||
         null
       )
     }
-  
     static getList = () => this.#list
   }
   module.exports = {

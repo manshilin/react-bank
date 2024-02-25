@@ -1,4 +1,4 @@
-// Import React and necessary components/modules
+// front/src/page/sendPage/index.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 

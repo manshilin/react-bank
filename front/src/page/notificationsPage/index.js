@@ -1,4 +1,4 @@
-// Import React and necessary components/modules
+// front/src/page/notificationsPage/index.js
 import React from 'react';
 
 // NotificationsPage component

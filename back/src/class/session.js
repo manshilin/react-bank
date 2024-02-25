@@ -1,4 +1,4 @@
-//session.js
+//back/src/class/session.js
 class Session {
     static #list = []
     constructor(user) {
@@ -44,4 +44,4 @@ class Session {
     Session,
   }
   
-  console.log(Session.generateCode())
+  

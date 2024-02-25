@@ -1,13 +1,11 @@
-// session.ts
+// front/src/context/session.ts
 // Додаємо властивість session до глобального об'єкта Window
 declare global {
   interface Window {
     session: Session | null;
   }
 }
-
 export const SESSION_KEY = 'sessionAuth';
-
 type User = {
   id: number;
   email: string;
@@ -15,22 +13,21 @@ type User = {
   role: number;
   isConfirm: boolean;
 };
-
 interface Session {
   token: string;
   user: User;
 }
-
 export const saveSession = (session: Session): void => {
   try {
+    console.log("Saving session:", session); 
     window.session = session;
     localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    console.log("Session saved:", window.session); 
   } catch (er) {
-    console.log(er);
+    console.log("Error saving session:", er); 
     window.session = null;
   }
 };
-
 export const loadSession = (): Session | null => {
   try {
     const session: Session | null = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
@@ -46,7 +43,6 @@ export const loadSession = (): Session | null => {
     return null;
   }
 };
-
 export const getTokenSession = (): string | null => {
   try {
     const session: Session | null = getSession();
@@ -56,7 +52,6 @@ export const getTokenSession = (): string | null => {
     return null;
   }
 };
-
 export const getSession = (): Session | null => {
   try {
     const session: Session | null = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null') || window.session;

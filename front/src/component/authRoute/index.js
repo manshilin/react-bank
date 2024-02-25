@@ -1,4 +1,4 @@
-// src/components/AuthRoute/index.js
+// src/component/authRoute/index.js
 
 // AuthRoute.js
 import React, { useContext } from 'react';

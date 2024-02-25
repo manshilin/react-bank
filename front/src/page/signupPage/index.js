@@ -1,35 +1,26 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
-import { AuthContext } from "../../context/authContext";
-
 import "./index.css"; 
 
 const SignupPage = () => {
-  const { user } = useContext(AuthContext);
-  const navigate = useNavigate();
   const { signup } = useAuth();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
 
-  const handleSignup = async () => {
+  const handleSignup = async (e) => {
+    e.preventDefault();
     const { user, token } = await signup(formData);
     if (user && token) {
-      navigate("/signup-confirm");
+      navigate("/signup-confirm"); // перенаправити на сторінку підтвердження після реєстрації
     }
-  }
-
-  useEffect(() => {
-    if (user && user.isConfirm) {
-      navigate("/signup-confirm");
-    }
-  }
-  , [user, navigate]);
+  };
 
   return (
     <main>
       <h1 className="h1title">Sign Up</h1>
       <p className="pdescribe">Select login method</p>
-      <form>
+      <form onSubmit={handleSignup}>
         <label htmlFor="email">Email</label>
         <input
           type="email"
@@ -41,7 +32,7 @@ const SignupPage = () => {
             }))
           }
         />
-        <label htmlFor="password">Password</label> {/* Додано поле для пароля */}
+        <label htmlFor="password">Password</label>
         <input
           type="password"
           id="password"
@@ -52,13 +43,12 @@ const SignupPage = () => {
             }))
           }
         />
+        <button type="submit">
+          Continue
+        </button>
       </form>
-      <button type="button" onClick={handleSignup}>
-        Continue
-      </button>
     </main>
   );
-}
+};
 
 export default SignupPage;
-

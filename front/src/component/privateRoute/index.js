@@ -4,7 +4,8 @@ import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../../context/authContext';
 
 const PrivateRoute = ({ element }) => {
-  const { token } = useContext(AuthContext);
+  const { state: { token, loading } } = useContext(AuthContext); // Використання AuthContext для отримання token та loading
+
   return token ? element : <Navigate to="/signin" />;
 };
 
