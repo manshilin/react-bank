@@ -1,35 +1,51 @@
 // front/src/page/sendPage/index.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+const sendMoney = async () => {
+  try {
+    const recipient = 'example@example.com';
+    const amount = 100;
+
+    // Simulate server response
+    const response = await fetch('/api/send-money', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ recipient, amount }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to send money');
+    }
+
+    // Update balance locally
+    const updatedBalance = currentBalance - amount;
+    setCurrentBalance(updatedBalance);
+
+    // Fetch updated transaction history
+    await fetchTransactionHistory();
+
+    // Navigate to balance page with updated balance
+    navigate('/balance', { state: { updatedBalance }});
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 function SendPage() {
   const [email, setEmail] = useState('');
   const [amount, setAmount] = useState('');
+  const [balanceUpdated, setBalanceUpdated] = useState(false); // New state to track balance update
   const navigate = useNavigate();
 
   const handleSendMoney = async () => {
-    // Assume there is a function sendMoneyToUser in your backend
-    // This function should handle the transaction and notifications
-    try {
-      // Call backend API to send money and trigger notifications
-      // Replace 'YOUR_BACKEND_API_ENDPOINT' with the actual endpoint
-      const response = await fetch('YOUR_BACKEND_API_ENDPOINT/send-money', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, amount }),
-      });
-
-      if (response.ok) {
-        // Money sent successfully, you may want to show a success message or redirect
-        navigate('/balance');
-      } else {
-        // Handle error, show error message, etc.
-        console.error('Failed to send money:', response.statusText);
-      }
-    } catch (error) {
-      console.error('Error sending money:', error);
+    const success = await sendMoney(email, amount);
+    if (success) {
+      setBalanceUpdated(true); // Update balance status
+      navigate('/balance', { state: { updated: true } }); // Navigate to balance page with updated state
+    } else {
+      console.error('Failed to send money');
     }
   };
 

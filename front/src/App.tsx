@@ -18,13 +18,12 @@ import TransactionPage from './page/transactionPage';
 import Error from './page/error';
 import Page from './component/page';
 import { AuthProvider } from './context/authContext';
-
-
 function App() {
   return (
-    <Page>
+    
       <AuthProvider> 
         <BrowserRouter>
+        <Page>
           <Routes>
             <Route path="/" element={ <AuthRoute element={<WellcomePage />}/>}/>
             <Route path="/signup" element={<AuthRoute element={<SignupPage />} />}/>
@@ -40,10 +39,10 @@ function App() {
             <Route path="/transaction/:transactionId" element={<PrivateRoute element={<TransactionPage />} />} />
             <Route path="*" element={<Error />} />
           </Routes>
+          </Page>
         </BrowserRouter>
       </AuthProvider>
-    </Page>
+    
   );
 }
-
 export default App;

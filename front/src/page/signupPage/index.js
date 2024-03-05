@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
-import "./index.css"; 
+import "./index.css";
 
 const SignupPage = () => {
   const { signup } = useAuth();
@@ -10,9 +10,15 @@ const SignupPage = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    const { user, token } = await signup(formData);
-    if (user && token) {
-      navigate("/signup-confirm"); // перенаправити на сторінку підтвердження після реєстрації
+    console.log("Form data:", formData); // Log form data to check values before signup
+    try {
+      const { user, token } = await signup(formData);
+      console.log("Signup response:", { user, token }); // Log signup response
+      if (user && token) {
+        navigate("/signup-confirm"); // Redirect to confirmation page after successful registration
+      }
+    } catch (error) {
+      console.error("Signup error:", error); // Log any signup errors
     }
   };
 
@@ -43,9 +49,7 @@ const SignupPage = () => {
             }))
           }
         />
-        <button type="submit">
-          Continue
-        </button>
+        <button type="submit">Continue</button>
       </form>
     </main>
   );

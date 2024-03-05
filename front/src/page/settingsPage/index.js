@@ -2,6 +2,7 @@
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from "../../context/authContext";
+import axios from 'axios'; 
 
 function SettingsPage() {
   // Retrieve authentication context and update function
@@ -30,12 +31,16 @@ function SettingsPage() {
   };
 
   // Function to handle logout
-  const handleLogout = () => {
-    // Perform logout logic (replace with your implementation)
-    // ...
+  const handleLogout = async () => {
+    try {
+      // Send HTTP request to logout route
+      await axios.post('/logout');
 
-    // Clear authentication context
-    updateUser(null);
+      // Clear authentication context upon successful logout
+      updateUser(null);
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   };
 
   return (
