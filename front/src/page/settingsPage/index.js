@@ -31,17 +31,30 @@ function SettingsPage() {
   };
 
   // Function to handle logout
-  const handleLogout = async () => {
-    try {
-      // Send HTTP request to logout route
-      await axios.post('/logout');
+  // Function to handle logout
+const handleLogout = async () => {
+  try {
+    // Get the session token from localStorage
+    const session = JSON.parse(localStorage.getItem('sessionAuth'));
 
-      // Clear authentication context upon successful logout
-      updateUser(null);
-    } catch (error) {
-      console.error('Error logging out:', error);
+    // Send HTTP request to logout route
+    const response = await fetch('http://localhost:4000/logout', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${session.token}` // Include the session token in the request headers
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to logout');
     }
-  };
+
+    // Clear authentication context upon successful logout
+    updateUser(null);
+  } catch (error) {
+    console.error('Error logging out:', error);
+  }
+};
 
   return (
     <div>

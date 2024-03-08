@@ -5,9 +5,12 @@ const path = require('path');
 const { User } = require('../class/user');
 const { Session } = require('../class/session');
 const { Confirm } = require('../class/confirm');
-const { Transaction, TransactionManager } = require('../class/transactions');
+const { Transaction, SendTransaction, ReceiveTransaction, TransactionManager } = require('../class/transactions');
 const e = require('express');
 //=====================================================
+
+// Create a new instance of TransactionManager
+const transactionManager = new TransactionManager();
 
 router.post('/signup', function (req, res) {
   const { email, password} = req.body; 
@@ -116,11 +119,10 @@ router.post('/signup-confirm', function (req, res) {
   }
 });
 //=====================================================
-// Route for logging out and deleting session
 router.post('/logout', (req, res) => {
-  const sessionToken = req.headers.authorization;
+  const sessionToken = req.headers.authorization.split(' ')[1];
 
-  console.log('Received logout request with session token:', sessionToken); // Log the received session tok
+  console.log('Received logout request with session token:', sessionToken); // Log the received session token
   if (sessionToken) {
     Session.delete(sessionToken);
     res.status(200).json({ message: 'Logged out successfully' });
@@ -128,6 +130,7 @@ router.post('/logout', (req, res) => {
     res.status(400).json({ error: 'Session token not provided' });
   }
 });
+
 //=====================================================
 router.get('/balance', function (req, res) {
   try {
@@ -141,7 +144,7 @@ router.get('/balance', function (req, res) {
     }
 
     const user = Session.getUserFromToken(sessionToken);
-    console.log('balanceUser:', user);
+
 
     if (!user) {
       return res.status(401).json({
@@ -167,10 +170,23 @@ router.get('/balance', function (req, res) {
 // ==========================================================
 router.post('/send', async (req, res) => {
   try {
-    const { email, amount } = req.body;
-    console.log('Received money sending request with email and amount:', email, amount); 
+    const { recipient, amount } = req.body;
+    console.log('Received money sending request with recipient and amount:', recipient, amount); 
 
-    // Your logic to send money to the user based on email and amount
+    // Validate the received data
+    if (!recipient || !amount) {
+      console.error('Invalid data received:', req.body);
+      return res.status(400).send('Invalid data');
+    }
+
+    // Define time as the current time
+    const time = new Date();
+
+    // Create a new SendTransaction
+    const newTransaction = new SendTransaction(time, amount, recipient);
+    transactionManager.addTransaction(newTransaction);
+
+    console.log('Transaction created and added successfully:', newTransaction);
 
     // Simulate successful response
     res.sendStatus(200);
@@ -180,12 +196,22 @@ router.post('/send', async (req, res) => {
   }
 });
 
-// Route for retrieving transaction history
-router.get('/transactions', function (req, res) {
+//=================================================================================
+router.get('/transactions', async (req, res) => {
   console.log('Received transaction history retrieval request');
   try {
-    // Your logic to fetch and return transaction history
-    const transactions = Transaction.getAll(); // Example function to retrieve all transactions
+    console.log('Before using req.headers.authorization:', req.headers.authorization);
+    const sessionToken = req.headers.authorization.split(' ')[1]; 
+    console.log('After using req.headers.authorization:', req.headers.authorization);
+    const user = Session.getUserFromToken(sessionToken);
+    if (!user) {
+      return res.status(401).json({
+        message: "Помилка. Невірна сесія або сесія закінчилася",
+      });
+    }
+
+    // Fetch and return transaction history
+    const transactions = transactionManager.getTransactions(); 
 
     return res.status(200).json({
       message: 'Успішно отримано історію транзакцій',
@@ -199,14 +225,16 @@ router.get('/transactions', function (req, res) {
   }
 });
 
+//===========================================================================
 // Route for creating a new transaction
 router.post('/transactions', async (req, res) => {
   try {
     const { sender, receiver, amount } = req.body;
     console.log('Received new transaction creation request with sender, receiver, and amount:', sender, receiver, amount);
 
-    // Your logic to create a new transaction based on sender, receiver, and amount
-    const newTransaction = Transaction.create({ sender, receiver, amount }); // Example function to create a transaction
+    // Create a new ReceiveTransaction
+    const newTransaction = new ReceiveTransaction(time, amount, icon);
+    transactionManager.addTransaction(newTransaction);
 
     return res.status(200).json({
       message: 'Нова транзакція успішно створена',

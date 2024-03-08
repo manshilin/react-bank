@@ -8,7 +8,7 @@ class User {
   static #list = []
   static #count = 1
   constructor({ email, password, role }) { // Додали параметр балансу
-    this.id = User.#count++
+    this.userId = User.#count++
     this.email = String(email).toLowerCase()
     this.password = String(password)
     this.role = User.#convertRole(role)
@@ -39,9 +39,9 @@ class User {
       ) || null
     )
   }
-  static getById(id) {
+  static getById(userId) {
     return (
-      this.#list.find((user) => user.id === Number(id)) ||
+      this.#list.find((user) => user.userId === Number(userId)) ||
       null
     )
   }

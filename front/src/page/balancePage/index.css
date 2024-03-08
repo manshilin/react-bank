@@ -92,4 +92,27 @@
     border-bottom: 1px solid #ccc;
     padding: 10px;
   }
+  .transaction-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .user-icon {
+    width: 24px;
+    height: 24px;
+    background-image: url('./img/user.svg');
+    background-size: cover;
+  }
+  
+  .transaction-info {
+    flex-grow: 1;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  
+  .transaction-amount {
+    text-align: right;
+  }
+  
   

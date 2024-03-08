@@ -1,4 +1,4 @@
-// Додаємо властивість session до глобального об'єкта Window
+// front/src/context/session.ts
 declare global {
   interface Window {
     session: Session | null;
