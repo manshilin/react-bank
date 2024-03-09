@@ -11,9 +11,19 @@ function SendPage() {
       const recipient = email;
       const amountToSend = parseInt(amount);
   
+      // Get the current balance from localStorage
+      const currentBalance = parseInt(localStorage.getItem('currentBalance'));
+      console.log('currentBalance',currentBalance);
+
       // Validate the data to be sent
       if (!recipient || !amountToSend) {
         console.error('Invalid data:', { recipient, amount: amountToSend });
+        return;
+      }
+
+      // Check if the balance is sufficient
+      if (currentBalance < amountToSend) {
+        alert('Недостатньо коштів для виконання транзакції');
         return;
       }
   
@@ -21,6 +31,7 @@ function SendPage() {
   
       // Get the session token from localStorage
       const session = JSON.parse(localStorage.getItem('sessionAuth'));
+      console.log('session SendPage', session);
   
       const response = await fetch('http://localhost:4000/send', {
         method: 'POST',
@@ -37,6 +48,11 @@ function SendPage() {
       }
   
       console.log('Money sent successfully');
+
+      // Update the current balance
+      const newBalance = currentBalance - amountToSend;
+      localStorage.setItem('currentBalance', newBalance.toString());
+
       navigate('/balance');
     } catch (error) {
       console.error('Error sending money:', error); // Log the error

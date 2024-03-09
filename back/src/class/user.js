@@ -46,6 +46,19 @@ class User {
     )
   }
   static getList = () => this.#list
+
+  // Debit the user's account
+  debit(amount) {
+    if (this.currentBalance < amount) {
+      throw new Error('Недостатньо коштів');
+    }
+    this.currentBalance -= amount;
+  }
+
+  // Credit the user's account
+  credit(amount) {
+    this.currentBalance += amount;
+  }
 }
 module.exports = {
   User,

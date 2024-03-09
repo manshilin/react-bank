@@ -171,24 +171,36 @@ router.get('/balance', function (req, res) {
 router.post('/send', async (req, res) => {
   try {
     const { recipient, amount } = req.body;
-    console.log('Received money sending request with recipient and amount:', recipient, amount); 
+    console.log('Received new transaction creation request with sender, recipient, and amount:', recipient, amount);
 
-    // Validate the received data
-    if (!recipient || !amount) {
+    // Get the sender and recipient users
+   
+    const sessionToken = req.headers.authorization.split(' ')[1];
+    console.log('sessionToken', sessionToken);
+
+    const sender = Session.getUserFromToken(sessionToken);
+    console.log('sender:', sender);
+
+    const recipientUser = User.getByEmail(recipient);
+    console.log('recipient:', recipientUser);
+
+    // Validate the received data and the sender and recipient users
+    if (!recipient || !amount || !sender || !recipientUser) {
       console.error('Invalid data received:', req.body);
       return res.status(400).send('Invalid data');
     }
 
-    // Define time as the current time
-    const time = new Date();
+    // Debit the sender's account and credit the recipient's account
+    console.log('Before debit and credit:', sender.currentBalance, recipientUser.currentBalance);
+    sender.debit(amount);
+    recipientUser.credit(amount);
+    console.log('After debit and credit:', sender.currentBalance, recipientUser.currentBalance);
 
     // Create a new SendTransaction
-    const newTransaction = new SendTransaction(time, amount, recipient);
+    const newTransaction = new SendTransaction(new Date(), amount, recipient);
     transactionManager.addTransaction(newTransaction);
 
     console.log('Transaction created and added successfully:', newTransaction);
-
-    // Simulate successful response
     res.sendStatus(200);
   } catch (error) {
     console.error('Error sending money:', error);
@@ -209,7 +221,6 @@ router.get('/transactions', async (req, res) => {
         message: "Помилка. Невірна сесія або сесія закінчилася",
       });
     }
-
     // Fetch and return transaction history
     const transactions = transactionManager.getTransactions(); 
 
@@ -224,7 +235,6 @@ router.get('/transactions', async (req, res) => {
     });
   }
 });
-
 //===========================================================================
 // Route for creating a new transaction
 router.post('/transactions', async (req, res) => {

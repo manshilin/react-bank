@@ -1,4 +1,5 @@
 //back/src/class/session.js
+const { User } = require('./user');
 class Session {
   static #list = [];
   constructor(user) {
@@ -7,7 +8,7 @@ class Session {
       email: user.email,
       isConfirm: user.isConfirm,
       role: user.role,
-      id: user.userId,
+      userId: user.userId,
       currentBalance: user.currentBalance, 
     };
   }
@@ -30,10 +31,11 @@ class Session {
     return session;
   };
   
-  static getUserFromToken = (token) => { // Змінено назву функції
-    return (
-      this.#list.find((item) => item.token === token)?.user || null
-    );
+  static getUserFromToken = (token) => { 
+    const session = this.#list.find((item) => item.token === token);
+    console.log('getUserFromToken session', session);
+
+    return session ? User.getById(session.user.userId) : null; // Get the user by userId
   };
   
   static delete = (token) => {
