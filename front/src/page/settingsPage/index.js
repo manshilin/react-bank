@@ -51,6 +51,8 @@ const handleLogout = async () => {
 
     // Clear authentication context upon successful logout
     updateUser(null);
+    localStorage.clear();
+    localStorage.removeItem('sessionAuth');
   } catch (error) {
     console.error('Error logging out:', error);
   }

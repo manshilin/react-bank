@@ -1,17 +1,18 @@
-//front/src/index.tsx
+// front/src/index.tsx
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import "./normalize.css";
 import "./index.css";
 import App from "./App";
-import ErrorBoundary from "./component/errorBoundary";
 import { AuthProvider } from "./context/authContext";
 
-ReactDOM.render(
-  <ErrorBoundary>
+const container = document.getElementById('root')!; // Use the non-null assertion operator (!)
+const root = createRoot(container); // Now TypeScript knows container is not null
+
+root.render(
+  
     <AuthProvider>
-    <App />
-  </AuthProvider>
-  </ErrorBoundary>,
-  document.getElementById('root')
+      <App />
+    </AuthProvider>
+
 );

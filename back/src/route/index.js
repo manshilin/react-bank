@@ -6,17 +6,14 @@ const path = require('path');
 
 
 const auth = require('./auth')
+const user = require('./user')
+const transaction = require('./transaction')    
 // Підключіть інші файли роутів, якщо є
 
 // Об'єднайте файли роутів за потреби
 router.use('/', auth)
-// Використовуйте інші файли роутів, якщо є
-
-
-// router.get('/', (req, res) => {
-//   res.render('/')
-// }
-// )
+router.use('/', user)
+router.use('/', transaction)
 
 
 // Експортуємо глобальний роутер

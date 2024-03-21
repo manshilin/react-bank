@@ -55,6 +55,17 @@ class User {
     this.currentBalance -= amount;
   }
 
+  static confirmUser(email) {
+    const user = this.getByEmail(email);
+    if (user) {
+      user.isConfirm = true;
+      return true;
+    }
+    return false;
+  }
+
+  
+
   // Credit the user's account
   credit(amount) {
     this.currentBalance += amount;

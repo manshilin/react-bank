@@ -1,6 +1,8 @@
 //App.tsx
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { loadSession } from './context/session';
+import { AuthContext } from './context/authContext';
 import AuthRoute from './component/authRoute';
 import PrivateRoute from './component/privateRoute';
 import WellcomePage from './page/wellcomePage';
@@ -18,7 +20,28 @@ import TransactionPage from './page/transactionPage';
 import Error from './page/error';
 import Page from './component/page';
 import { AuthProvider } from './context/authContext';
+
+function UseSession() {
+  const navigate = useNavigate();
+  const { dispatch } = useContext(AuthContext);
+
+  useEffect(() => {
+    const session = loadSession();
+    if (session && session.user.isConfirm) {
+      dispatch({ type: 'SIGN_IN', user: session.user, token: session.token });
+      navigate('/balance');
+    } else if (session && !session.user.isConfirm) {
+      navigate('/signup-confirm');
+    }
+  }, [dispatch, navigate]);
+
+  return null; // Цей компонент не рендерить нічого в DOM
+}
+
+
 function App() {
+  
+  
   return (
     
       <AuthProvider> 

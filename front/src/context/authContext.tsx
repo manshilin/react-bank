@@ -111,7 +111,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const data = await response.json();
   const user = data.session.user;
   const token = data.session.token;
-  const currentBalance = data.currentBalance; // Get user balance from data
+  const currentBalance = data.session.currentBalance; // Get user balance from data
   console.log('currentBalance:', currentBalance); // Додано виведення в консоль
   if (user && token && currentBalance) {
     dispatch({ type: 'SIGN_IN', user: { ...user, email: formData.email, currentBalance }, token });

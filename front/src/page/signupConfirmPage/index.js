@@ -29,13 +29,7 @@ function SignupConfirmPage() {
       console.error('Error confirming signup:', error);
     }
   }
-  // useEffect(() => {
-  //   if (state.token) { // Змінено з user на token
-  //     navigate('/balance');
-  //   }
-  // }, [state.token, navigate]); // Змінено з [user, navigate] на [state.token, navigate]
-
-
+  
   return (
     <main>
       <h1 className="h1title">Confirm Signup</h1>

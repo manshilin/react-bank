@@ -5,12 +5,8 @@ const path = require('path');
 const { User } = require('../class/user');
 const { Session } = require('../class/session');
 const { Confirm } = require('../class/confirm');
-const { Transaction, SendTransaction, ReceiveTransaction, TransactionManager } = require('../class/transactions');
 const e = require('express');
 //=====================================================
-
-// Create a new instance of TransactionManager
-const transactionManager = new TransactionManager();
 
 router.post('/signup', function (req, res) {
   const { email, password} = req.body; 
@@ -47,38 +43,56 @@ router.post('/signup', function (req, res) {
     });
   }
 });
-
-// Route for user login
+//====================================================================
 router.post('/signin', function (req, res) {
+  console.log('Received /signin request with body:', req.body);
+  
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({
-      message: "Помилка. Обов'язкові поля відсутні",
-    });
+    console.log('Error: Missing email or password');
+    return res.status(400).json({ message: "Помилка. Обов'язкові поля відсутні" });
   }
+
   try {
+    console.log(`Attempting to find user by email: ${email}`);
     const user = User.getByEmail(email);
-
-    if (!user || user.password !== password) {
-      return res.status(400).json({
-        message: 'Помилка. Невірна електронна адреса або пароль',
-      });
+    
+    if (!user) {
+      console.log(`Error: User not found for email: ${email}`);
+      return res.status(400).json({ message: 'Помилка. Невірна електронна адреса або пароль' });
     }
-    const session = Session.create(user);
 
+    if (user.password !== password) {
+      console.log(`Error: Incorrect password for user: ${email}`);
+      return res.status(400).json({ message: 'Помилка. Невірна електронна адреса або пароль' });
+    }
+
+    console.log(`User found, checking session for: ${email}`);
+    const session = Session.findSessionByEmail(email);
+
+    
+    if (!session) {
+      console.log('Error: Session not found');
+      return res.status(404).json({ message: 'Сесія не знайдена. Авторизуйтеся знову' });
+    }
+
+    console.log(`User ${email} authenticated successfully`);
     return res.status(200).json({
       message: 'Користувач успішно авторизований',
-      session,
+      session: {
+        user,
+        token: session.token,
+        currentBalance: user.currentBalance // Забезпечте, що це поле присутнє у відповіді
+      }
     });
   } catch (err) {
-    return res.status(400).json({
-      message: 'Помилка авторизації користувача',
-    });
+    console.error('Exception during signin process:', err);
+    return res.status(400).json({ message: 'Помилка авторизації користувача' });
   }
 });
-//======================================================================
-// Route for confirming user registration
+
+//====================================================================
 router.post('/signup-confirm', function (req, res) {
   const { confirmationCode } = req.body;
   if (!confirmationCode) {
@@ -86,9 +100,10 @@ router.post('/signup-confirm', function (req, res) {
       message: "Помилка. Відсутні обов'язкові поля",
     });
   }
-  
+
   try {
     const confirmData = Confirm.getData(confirmationCode);
+    console.log('confirmData', confirmData);
 
     if (!confirmData) {
       return res.status(400).json({
@@ -102,14 +117,20 @@ router.post('/signup-confirm', function (req, res) {
         message: 'Помилка. Користувача не знайдено',
       });
     }
-    user.isConfirm = true;
-    Confirm.delete(confirmationCode);
-    const session = Session.create(user);
 
+    // Оновлення статусу підтвердження
+    User.confirmUser(confirmData);
+    // метод для оновлення сесії
+  Session.update(user.email, { isConfirm: true });
+
+
+    // Оновлення сесії з новим статусом `isConfirm`
+    const session = Session.findSessionByEmail(user.email);
+    Confirm.delete(confirmationCode)
+    console.log('session', session);  
     return res.status(200).json({
       message: 'Користувач успішно підтверджений та авторизований',
       session,
-      confirmationCode,
     });
   } catch (err) {
     console.error(err);
@@ -124,138 +145,82 @@ router.post('/logout', (req, res) => {
 
   console.log('Received logout request with session token:', sessionToken); // Log the received session token
   if (sessionToken) {
-    Session.delete(sessionToken);
     res.status(200).json({ message: 'Logged out successfully' });
   } else {
     res.status(400).json({ error: 'Session token not provided' });
   }
 });
-
 //=====================================================
-router.get('/balance', function (req, res) {
+router.post('/recovery', (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({
+      message: "Помилка. Обов'язкові поля відсутні",
+    });
+  }
   try {
-    const sessionToken = req.headers.authorization.split(' ')[1];
-    console.log('Received balance retrieval request with session token:', sessionToken);
-
-    if (!sessionToken) {
-      return res.status(401).json({
-        message: "Помилка. Сесія не надана",
-      });
-    }
-
-    const user = Session.getUserFromToken(sessionToken);
-
-
+    const user = User.getByEmail(email);
     if (!user) {
-      return res.status(401).json({
-        message: "Помилка. Невірна сесія або сесія закінчилася",
+      return res.status(400).json({
+        message: 'Помилка. Користувача не знайдено',
+      });
+    }
+    const confirm = Confirm.create(user.email);
+    console.log('confirm', confirm);
+    return res.status(200).json({
+      message: 'Користувач успішно зареєстрований',
+      confirm,
+    });
+  } catch (err) {
+    return res.status(400).json({
+      message: 'Помилка відновлення паролю',
+    });
+  }
+});
+//=====================================================
+router.post('/recovery-confirm', function (req, res) {
+  const { confirmationCode } = req.body;
+  if (!confirmationCode) {
+    return res.status(400).json({
+      message: "Помилка. Відсутні обов'язкові поля",
+    });
+  }
+  try {
+    const confirmData = Confirm.getData(confirmationCode);
+    console.log('confirmData', confirmData);
+
+    if (!confirmData) {
+      return res.status(400).json({
+        message: 'Помилка. Невірний код підтвердження',
       });
     }
 
-    const currentBalance = user.currentBalance;
-    console.log('Sending current balance',currentBalance);
+    const user = User.getByEmail(confirmData);
+    if (!user) {
+      return res.status(400).json({
+        message: 'Помилка. Користувача не знайдено',
+      });
+    }
+    Confirm.delete(confirmationCode);
+    const session = Session.create(user);
+    console.log('session1', session);
+    session.user.isConfirm = true;
+    console.log('session2', session);
 
     return res.status(200).json({
-      message: 'Успішно отримано баланс користувача',
-      balance: currentBalance,
+      message: 'Користувач успішно підтверджений та авторизований',
+      session,
+      confirmationCode,
     });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({
-      message: 'Помилка отримання балансу користувача',
+    return res.status(400).json({
+      message: 'Помилка підтвердження користувача',
     });
   }
-});
-
-// ==========================================================
-router.post('/send', async (req, res) => {
-  try {
-    const { recipient, amount } = req.body;
-    console.log('Received new transaction creation request with sender, recipient, and amount:', recipient, amount);
-
-    // Get the sender and recipient users
-   
-    const sessionToken = req.headers.authorization.split(' ')[1];
-    console.log('sessionToken', sessionToken);
-
-    const sender = Session.getUserFromToken(sessionToken);
-    console.log('sender:', sender);
-
-    const recipientUser = User.getByEmail(recipient);
-    console.log('recipient:', recipientUser);
-
-    // Validate the received data and the sender and recipient users
-    if (!recipient || !amount || !sender || !recipientUser) {
-      console.error('Invalid data received:', req.body);
-      return res.status(400).send('Invalid data');
-    }
-
-    // Debit the sender's account and credit the recipient's account
-    console.log('Before debit and credit:', sender.currentBalance, recipientUser.currentBalance);
-    sender.debit(amount);
-    recipientUser.credit(amount);
-    console.log('After debit and credit:', sender.currentBalance, recipientUser.currentBalance);
-
-    // Create a new SendTransaction
-    const newTransaction = new SendTransaction(new Date(), amount, recipient);
-    transactionManager.addTransaction(newTransaction);
-
-    console.log('Transaction created and added successfully:', newTransaction);
-    res.sendStatus(200);
-  } catch (error) {
-    console.error('Error sending money:', error);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
-//=================================================================================
-router.get('/transactions', async (req, res) => {
-  console.log('Received transaction history retrieval request');
-  try {
-    console.log('Before using req.headers.authorization:', req.headers.authorization);
-    const sessionToken = req.headers.authorization.split(' ')[1]; 
-    console.log('After using req.headers.authorization:', req.headers.authorization);
-    const user = Session.getUserFromToken(sessionToken);
-    if (!user) {
-      return res.status(401).json({
-        message: "Помилка. Невірна сесія або сесія закінчилася",
-      });
-    }
-    // Fetch and return transaction history
-    const transactions = transactionManager.getTransactions(); 
-
-    return res.status(200).json({
-      message: 'Успішно отримано історію транзакцій',
-      transactions: transactions,
-    });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({
-      message: 'Помилка отримання історії транзакцій',
-    });
-  }
-});
-//===========================================================================
-// Route for creating a new transaction
-router.post('/transactions', async (req, res) => {
-  try {
-    const { sender, receiver, amount } = req.body;
-    console.log('Received new transaction creation request with sender, receiver, and amount:', sender, receiver, amount);
-
-    // Create a new ReceiveTransaction
-    const newTransaction = new ReceiveTransaction(time, amount, icon);
-    transactionManager.addTransaction(newTransaction);
-
-    return res.status(200).json({
-      message: 'Нова транзакція успішно створена',
-      transaction: newTransaction,
-    });
-  } catch (error) {
-    console.error('Помилка створення транзакції:', error);
-    return res.status(500).send('Внутрішня помилка сервера');
-  }
-});
+}
+);
+//=====================================================
 
 
-//==========================================================================
 module.exports = router;

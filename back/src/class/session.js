@@ -37,10 +37,30 @@ class Session {
 
     return session ? User.getById(session.user.userId) : null; // Get the user by userId
   };
+
+  static findSessionByEmail(email) {
+    // Finding the session for the given email
+    const session = this.#list.find(session => session.user.email === email);
+    return session;
+  }
   
   static delete = (token) => {
     this.#list = this.#list.filter((item) => item.token !== token);
   };
+  static update(email, updates) {
+    // Знаходження сесії за електронною поштою користувача
+    const session = this.#list.find((session) => session.user.email === email);
+    if (!session) return false;
+
+    // Оновлення відповідних полів у сесії
+    Object.keys(updates).forEach((key) => {
+      if (session.user.hasOwnProperty(key)) {
+        session.user[key] = updates[key];
+      }
+    });
+
+    return true;
+  }
 }
 
 module.exports = {
