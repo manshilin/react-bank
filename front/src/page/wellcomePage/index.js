@@ -1,16 +1,17 @@
 // front/src/page/wellcomePage/index.js
-import React from 'react';
-import { Fragment } from 'react';
+import React, { useState, useEffect, Fragment} from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Button from '../../component/button';
 import './index.css';
+import HeaderTimeWifi from '../../component/headerTimeWifi';
 
 const WellcomePage = () => {
   const [state, setState] = React.useState({
     email: '',
     password: '',
   });
+ 
 
   const handleChange = (event) => {
     setState({
@@ -26,10 +27,14 @@ const WellcomePage = () => {
 
 
   return (
-    <Fragment>
+    <main>
 
       <div className='backgroundFirst'>
-        <img src="./img/money.png" alt="pic" />
+      <HeaderTimeWifi color="white" />
+        <h1 className='title'>Hello!</h1>
+        <p className='text'>Welcome to bank app</p>
+        <div className='money'>
+          </div>
        
       </div>
 
@@ -47,11 +52,7 @@ const WellcomePage = () => {
           <Button text="Sign In" className="button" />
         </Link>
       </div>
-        
-        
-
-        {/* Button-link to Login Page */}
-    </Fragment>
+    </main>
   );
 };
 

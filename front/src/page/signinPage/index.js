@@ -2,6 +2,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/authContext';
+import HeaderTimeWifi from '../../component/headerTimeWifi';
 
 function SigninPage() {
     const { user, token, signin } = useContext(AuthContext);
@@ -35,6 +36,7 @@ function SigninPage() {
   
     return (
         <main>
+          <HeaderTimeWifi color="black"/>
             <h1 className="h1title">Sign in</h1>
             <p className="pdescribe">Select login method</p>
             <form>

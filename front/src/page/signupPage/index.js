@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
 import "./index.css";
+import HeaderTimeWifi from "../../component/headerTimeWifi";
 
 const SignupPage = () => {
   const { signup } = useAuth();
@@ -25,6 +26,10 @@ const SignupPage = () => {
 
   return (
     <main>
+      
+        <HeaderTimeWifi color="black" />
+      
+      
       <h1 className="h1title">Sign Up</h1>
       <p className="pdescribe">Select login method</p>
       <form onSubmit={handleSignup}>

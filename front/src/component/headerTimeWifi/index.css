@@ -1,0 +1,21 @@
+.header-time-wifi {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 0 20px;
+
+
+}
+
+.header-time-wifi__time--black,
+.header-time-wifi__wifi--black svg {
+    color: black;
+    fill: black;
+}
+
+.header-time-wifi__time--white,
+.header-time-wifi__wifi--white svg {
+    color: white;
+    fill: white;
+}

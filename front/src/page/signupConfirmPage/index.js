@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from 'react'; // Додано 
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/authContext'; // Імпортуйте AuthContext з вашого контексту аутентифікації
 import './index.css';
+import HeaderTimeWifi from '../../component/headerTimeWifi';
 
 function SignupConfirmPage() {
   const [confirmationCode, setConfirmationCode] = useState('');
@@ -32,6 +33,7 @@ function SignupConfirmPage() {
   
   return (
     <main>
+    <HeaderTimeWifi color="black"/>
       <h1 className="h1title">Confirm Signup</h1>
       <p className="pdescribe">Enter confirmation code</p>
       <form>

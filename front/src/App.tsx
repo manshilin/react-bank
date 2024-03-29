@@ -18,7 +18,6 @@ import RecivePage from './page/recivePage';
 import SendPage from './page/sendPage';
 import TransactionPage from './page/transactionPage';
 import Error from './page/error';
-import Page from './component/page';
 import { AuthProvider } from './context/authContext';
 
 function UseSession() {
@@ -46,7 +45,8 @@ function App() {
     
       <AuthProvider> 
         <BrowserRouter>
-        <Page>
+        <div className='app-container'>
+        
           <Routes>
             <Route path="/" element={ <AuthRoute element={<WellcomePage />}/>}/>
             <Route path="/signup" element={<AuthRoute element={<SignupPage />} />}/>
@@ -62,7 +62,7 @@ function App() {
             <Route path="/transaction/:transactionId" element={<PrivateRoute element={<TransactionPage />} />} />
             <Route path="*" element={<Error />} />
           </Routes>
-          </Page>
+          </div>
         </BrowserRouter>
       </AuthProvider>
     

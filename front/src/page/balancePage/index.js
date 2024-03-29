@@ -1,7 +1,7 @@
 // front/src/page/balancePage/index.js
 import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCurrentTime } from "../../util/time";
+import HeaderTimeWifi from "../../component/headerTimeWifi";
 import "./index.css";
 
 function BalancePage() {
@@ -9,18 +9,12 @@ function BalancePage() {
     const storedBalance = localStorage.getItem("currentBalance");
     return storedBalance ? parseInt(storedBalance) : 999;
   });
-  const [time, setTime] = useState(getCurrentTime());
   const [transactions, setTransactions] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTime(getCurrentTime());
-    }, 60000);
     fetchTransactionHistory();
     fetchCurrentBalance();
-
-    return () => clearInterval(timer);
   }, []);
 
   const fetchCurrentBalance = async () => {
@@ -78,12 +72,10 @@ function BalancePage() {
 
   return (
     <Fragment>
+      
       <div className="header">
-        <div>
-          <div className="time">{time}</div>
-          <div className="netwifibat"></div>
-        </div>
-
+        
+      <HeaderTimeWifi color="white" />
         <div className="header-settings">
           <div className="settings" onClick={() => navigate("/settings")}></div>
           <div className="main-wallet">Main Wallet</div>
@@ -92,38 +84,37 @@ function BalancePage() {
             onClick={() => navigate("/notifications")}
           ></div>
         </div>
-
         <div className="balance">$ {currentBalance}</div>
-
         <div className="buttons">
           <button onClick={() => navigate("/receive")}>Receive</button>
           <button onClick={() => navigate("/send")}>Send</button>
         </div>
       </div>
-
       <div className="transaction-history">
         <h2>Transaction History</h2>
         {transactions.length > 0 ? (
-         <ul>
-         {transactions.map((transaction, index) => (
-           <li key={index} className="transaction-item">
-             <div className="user-icon"> </div>
-             <div className="transaction-info">
-               <span>{transaction.recipientEmail}</span>
-               <span>{new Date(transaction.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}. Sending</span>
-             </div>
-             <span className="transaction-amount">-${transaction.amount}</span>
-           </li>
-         ))}
-       </ul>
-       
-       
-        ) : (
-          <p>Транзакцій немає</p>
-        )}
+  <>
+    <ul>
+      {transactions.map((transaction, index) => (
+        <li key={index} className="transaction-item">
+          <div className="user-icon"> </div>
+          <div className="transaction-info">
+            <span>{transaction.recipientEmail}</span>
+            <span>{new Date(transaction.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}. Sending</span>
+          </div>
+          <span className="transaction-amount">-${transaction.amount}</span>
+        </li>
+      ))}
+    </ul>
+    <p>Транзакцій немає</p>
+  </>
+) : (
+  <p>Транзакцій немає</p>
+)}
+
       </div>
     </Fragment>
   );
-}
+} 
 
 export default BalancePage;

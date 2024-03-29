@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from "../../context/authContext";
 import axios from 'axios'; 
+import HeaderTimeWifi from '../../component/headerTimeWifi';
 
 function SettingsPage() {
   // Retrieve authentication context and update function
@@ -60,6 +61,7 @@ const handleLogout = async () => {
 
   return (
     <div>
+      <HeaderTimeWifi color="black"/>
       <h1>Settings</h1>
       <div>
         <h2>Change Password</h2>

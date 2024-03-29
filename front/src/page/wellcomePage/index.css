@@ -1,54 +1,83 @@
-/* index.css */
+/* wellcomePage/index.css */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  .backgroundFirst {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 393px;
-     height: 583px;
-    flex-shrink: 0;
-    background-image: url(./img/backgroundFirst.png);
-    background: linear-gradient(180deg, #5431DF 0%, rgba(120, 92, 229, 0.00) 100%);
-  }
+ 
+.backgroundFirst {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* Make it full width */
+  height: 100%; /* Make it full height */
+  background-image: url(./img/backgroundFirst.png);
+  background: linear-gradient(180deg, #5431DF 0%, rgba(120, 92, 229, 0.00) 100%);
+  background-size: cover; /* Ensure background covers the entire div */
+  background-position: center; /* Center the background image */
+  overflow: hidden; /* Hide overflowed parts */
+  border-radius: 24px;
+}
+.header {
+  width: 393px;
+  height: 202px;
+  display: grid;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-image: linear-gradient(104.8deg, rgba(104, 226, 222, 0.85) 0%, rgba(68, 31, 215, 0.85) 100%), url('./img/mesh-202.svg');
+  background-size: cover;
+  font-family: Arial, sans-serif;
+}
+
+
+.title {
+  font-family: Jost;
+  font-size: 48px;
+  font-weight: 600;
+  line-height: 100%;
+  color: #FFF;
+  text-align: center;
+  margin-top: 50px;
+}
+
+.text {
+  font-family: Jost;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 150%;
+  color: #FFF;
+  text-align: center;
+  margin-top: 20px;
+}
+.money {
+  width: 601.54px;
+  height: 601.54px;
+  position: absolute; /* Position it relative to the nearest positioned ancestor */
+  top: 230px;
+  left: -10px;
+  background-image: url(./img/money.png); 
+  background-size: cover; /* Ensure the image covers the div */
+  opacity: 100; /* Make it completely transparent */
   
-  img {
-   
-    width: 601.536px;
-    height: 601.536px;
-    flex-shrink: 0;
-    
-  }
+  
+}
 
-  .button {
-    display: flex;
-    width: 353px;
-    padding: 20px 140px;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-
-    border-radius: 12px;
-    background: var(--Purple-main, #775CE5);
-
-    color: #FFF;
-    text-align: center;
-    font-family: Jost;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 100%; /* 16px */
-    text-decoration: none;
+.button {
+  display: flex;
+ 
+  width: 353px;
+  padding: 20px 140px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 12px;
+  background: var(--Purple-main, #775CE5);
+  color: #FFF;
+  text-align: center;
+  font-family: Jost;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 100%;
+  text-decoration: none;
   }
   
   button:hover {
-    background-color: #2458a5;
+  background-color: #2458a5;
   }
-  
