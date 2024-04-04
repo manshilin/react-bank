@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
 import "./index.css";
 import HeaderTimeWifi from "../../component/headerTimeWifi";
+import Button from "../../component/button";
 
 const SignupPage = () => {
   const { signup } = useAuth();
@@ -12,51 +13,33 @@ const SignupPage = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    console.log("Form data:", formData); // Log form data to check values before signup
     try {
       const { user, token } = await signup(formData);
-      console.log("Signup response:", { user, token }); // Log signup response
       if (user && token) {
-        navigate("/signup-confirm"); // Redirect to confirmation page after successful registration
+        navigate("/signup-confirm");
       }
     } catch (error) {
-      console.error("Signup error:", error); // Log any signup errors
+      console.error("Signup error:", error);
     }
+  };
+
+  // Функція для Button, що імітує submit
+  const handleSubmitClick = () => {
+    document.querySelector("form").dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
   };
 
   return (
     <main>
-      
-        <HeaderTimeWifi color="black" />
-      
-      
+      <HeaderTimeWifi color="black" />
       <h1 className="h1title">Sign Up</h1>
       <p className="pdescribe">Select login method</p>
       <form onSubmit={handleSignup}>
         <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          onChange={(e) =>
-            setFormData((prevState) => ({
-              ...prevState,
-              email: e.target.value,
-            }))
-          }
-        />
+        <input type="email" id="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
         <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          onChange={(e) =>
-            setFormData((prevState) => ({
-              ...prevState,
-              password: e.target.value,
-            }))
-          }
-        />
-        <button type="submit">Continue</button>
+        <input type="password" id="password" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
       </form>
+      <Button text="Continue" type="primary" onClick={handleSubmitClick} />
     </main>
   );
 };

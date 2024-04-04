@@ -1,24 +1,57 @@
+/* front/src/component/button/index.css */
 .button {
-    padding: 10px 15px;
-    margin: 5px;
-    border-radius: 12px;
-    background: var(--Purple-main, #775CE5);
-    color: #fff;
-    border: none;
-    cursor: pointer;    
+  padding: 20px 140px;
+  width: 353px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-family: Jost, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 100%;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s, opacity 0.3s;
 }
 
+.button--primary {
+  color: #FFF;
+  background-color: #775CE5;
+  border: none;
 
-
-.button:hover {
-    background-color: #2458a5;
 }
 
-.button:disabled {
-    background-color: #ccc;
-    color: #666;
-    cursor: not-allowed;
+.button--primary:hover {
+  background-color: transparent;
+  border: 2px solid #775CE5;
+  color: #775CE5;
+  
 }
 
-
-/* Path: front/src/component/button/index.js */
+  
+  .button--transparent {
+    background-color: transparent;
+    border: 2px solid #775CE5;
+    color: #775CE5;
+  }
+  
+  .button--transparent:hover {
+    background-color: #775CE5;
+    color: #FFF;
+  }
+  
+  .button--red {
+    color: red;
+    border: 2px solid red;
+  }
+  
+  .button--red:hover {
+    background-color: red;
+    color: #FFF;
+  }
+  
+  .button:hover {
+    opacity: 0.8;
+  }
+  

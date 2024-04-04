@@ -3,6 +3,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/authContext';
 import HeaderTimeWifi from '../../component/headerTimeWifi';
+import Button from '../../component/button';
 
 function SigninPage() {
     const { user, token, signin } = useContext(AuthContext);
@@ -63,9 +64,7 @@ function SigninPage() {
                     }
                 />
             </form>
-            <button type="button" onClick={handleSignin}>
-                Continue
-            </button>
+            <Button text="Continue" type="primary" onClick={handleSignin} />
         </main>
     );
 }
