@@ -2,9 +2,11 @@
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from "../../context/authContext";
-import axios from 'axios'; 
 import HeaderTimeWifi from '../../component/headerTimeWifi';
 import BackArrow from '../../component/arrow-back';
+import './index.css';
+import Button from '../../component/button';
+
 
 function SettingsPage() {
   // Retrieve authentication context and update function
@@ -18,6 +20,8 @@ function SettingsPage() {
   const handleChangePassword = () => {
     // Perform password change logic (replace with your implementation)
     // ...
+    
+
 
     // Update authentication context
     updateUser({ ...user, password: newPassword });
@@ -32,8 +36,6 @@ function SettingsPage() {
     updateUser({ ...user, email: newEmail });
   };
 
-  // Function to handle logout
-  // Function to handle logout
 const handleLogout = async () => {
   try {
     // Get the session token from localStorage
@@ -61,26 +63,39 @@ const handleLogout = async () => {
 };
 
   return (
-    <div>
+    <main>
       <HeaderTimeWifi color="black"/>
+      <div className="headerSetting">
       <BackArrow />
-      <h1>Settings</h1>
-      <div>
-        <h2>Change Password</h2>
-        <input type="password" placeholder="New Password" onChange={(e) => setNewPassword(e.target.value)} />
-        <button onClick={handleChangePassword}>Change Password</button>
+        <h1>Settings</h1>
       </div>
-      <div>
+
+      <div className='blockEmail'>
         <h2>Change Email</h2>
-        <input type="email" placeholder="New Email" onChange={(e) => setNewEmail(e.target.value)} />
-        <button onClick={handleChangeEmail}>Change Email</button>
+        <label>New Email</label>
+        <input type="email"   />
+        <label>Password</label>
+        <input type="password"  onChange={(e) => setNewEmail(e.target.value)} />
+        <Button type="transparent" text="Save Email" onClick={handleChangeEmail}/>
+        <div className='divider'></div>
       </div>
-      <div>
+      
+      <div className='blockPassword'>
+        <h2>Change Password</h2>
+        <label>New Password</label>
+        <input type="password" placeholder="New Password" onChange={(e) => setNewPassword(e.target.value)} />
+        <label> Old Password</label>
+        <input type="password" placeholder="Old Password" onChange={(e) => setNewPassword(e.target.value)} />
+        <Button type="transparent" text="Save Password" onClick={handleChangePassword}/>
+      <div className='divider'></div>
+      </div>
+      
+      <div className='logOut'>
         <h2>Logout</h2>
-        <button onClick={handleLogout}>Logout</button>
+        <Button type="red" text="Logout" onClick={handleLogout} />
       </div>
-      <Link to="/">Back to Home</Link>
-    </div>
+    
+    </main>
   );
 }
 

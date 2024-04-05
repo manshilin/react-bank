@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/authContext'; // Імпортуйте AuthContext з вашого контексту аутентифікації
 import './index.css';
 import HeaderTimeWifi from '../../component/headerTimeWifi';
+import Button from '../../component/button';
 
 function SignupConfirmPage() {
   const [confirmationCode, setConfirmationCode] = useState('');
@@ -35,19 +36,19 @@ function SignupConfirmPage() {
     <main>
     <HeaderTimeWifi color="black"/>
       <h1 className="h1title">Confirm Signup</h1>
-      <p className="pdescribe">Enter confirmation code</p>
+      <p className="pdescribe">Write the code you received</p>
       <form>
-        <label htmlFor="confirmationCode">Confirmation Code</label>
+        <label htmlFor="confirmationCode">Code</label>
         <input
           type="text"
           id="confirmationCode"
           value={confirmationCode}
           onChange={(e) => setConfirmationCode(e.target.value)}
         />
+        <Button type= "primary" text='Confirm' onClick={handleConfirmation}/>
       </form>
-      <button type="button" onClick={handleConfirmation}>
-        Confirm
-      </button>
+      
+      
     </main>
   );
 }

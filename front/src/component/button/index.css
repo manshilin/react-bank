@@ -1,6 +1,6 @@
 /* front/src/component/button/index.css */
 .button {
-  padding: 20px 140px;
+  padding: 20px 40px;
   width: 353px;
   display: inline-flex;
   align-items: center;
@@ -24,7 +24,7 @@
 
 .button--primary:hover {
   background-color: transparent;
-  border: 2px solid #775CE5;
+  border: 1px solid #775CE5;
   color: #775CE5;
   
 }
@@ -32,7 +32,7 @@
   
   .button--transparent {
     background-color: transparent;
-    border: 2px solid #775CE5;
+    border: 1px solid #775CE5;
     color: #775CE5;
   }
   
@@ -43,7 +43,7 @@
   
   .button--red {
     color: red;
-    border: 2px solid red;
+    border: 1px solid red;
   }
   
   .button--red:hover {

@@ -1,0 +1,36 @@
+
+.headerSetting {
+    padding-left: 15px;
+    width: 100%;
+    display: flex;
+    align-items: center; /* Це гарантує, що елементи будуть вирівняні по центру в вертикальному напрямку */
+    justify-content: space-between; /* Розкидає дочірні елементи рівномірно, стрілка опиниться зліва, заголовок - по центру */
+    text-align: center; /* Це забезпечує центрування тексту для випадків, коли контейнер ширший за вміст */
+  }
+  
+  .headerSetting h1 {
+    flex-grow: 1; /* Заголовок займе всю доступну ширину, забезпечуючи його центрування */
+  }
+  
+.blockPassword, .blockEmail {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 8px;
+    margin-bottom: 8px;
+    
+}
+
+.divider {
+    width: 100%;
+    height: 1px;
+    background:rgba(233, 232, 235, 1);
+    margin: 4px 0;
+}   
+
+.logOut {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
