@@ -1,4 +1,6 @@
 //back/src/class/user.js
+const bcrypt = require('bcrypt');
+
 class User {
   static USER_ROLE = {
     USER: 1,
@@ -7,13 +9,13 @@ class User {
   }
   static #list = []
   static #count = 1
-  constructor({ email, password, role }) { // Додали параметр балансу
+  constructor({ email, password, role }) {
     this.userId = User.#count++
     this.email = String(email).toLowerCase()
-    this.password = String(password)
+    this.password = bcrypt.hashSync(String(password), 10) // Hash the password
     this.role = User.#convertRole(role)
     this.isConfirm = false
-    this.currentBalance = Math.floor(Math.random() * (100000 - 100 + 1)) + 100;; // Встановлюємо баланс користувача
+    this.currentBalance = Math.floor(Math.random() * (100000 - 100 + 1)) + 100;
   }
   static #convertRole = (role) => {
     role = Number(role)
@@ -28,6 +30,7 @@ class User {
   }
   static create(data) {
     const user = new User(data)
+    console.log('New hash password:', user.password); // Додано лог
     this.#list.push(user)
     return user
   }
@@ -64,6 +67,24 @@ class User {
     return false;
   }
 
+  static async changePassword(userId, oldPassword, newPassword) {
+    const user = this.getById(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+  
+    // Check if the old password matches the current password
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      throw new Error('Incorrect old password');
+    }
+  
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+  
+    // Change the password
+    user.password = hashedPassword;
+  }
   
 
   // Credit the user's account
