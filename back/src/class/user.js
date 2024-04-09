@@ -1,6 +1,5 @@
 //back/src/class/user.js
 const bcrypt = require('bcrypt');
-
 class User {
   static USER_ROLE = {
     USER: 1,
@@ -12,7 +11,10 @@ class User {
   constructor({ email, password, role }) {
     this.userId = User.#count++
     this.email = String(email).toLowerCase()
-    this.password = bcrypt.hashSync(String(password), 10) // Hash the password
+    console.log(`Input password for user ${this.email}: ${String(password)}`);
+    this.password = bcrypt.hashSync((password), 10); // Hash the password
+    console.log(`Hashed password for user ${this.email}: ${this.password}`);
+
     this.role = User.#convertRole(role)
     this.isConfirm = false
     this.currentBalance = Math.floor(Math.random() * (100000 - 100 + 1)) + 100;
@@ -34,6 +36,13 @@ class User {
     this.#list.push(user)
     return user
   }
+
+  static changeEmail(user, newEmail) {
+    user.email = newEmail;
+  }
+
+  // Метод для отримання користувача за email
+
   static getByEmail(email) {
     return (
       this.#list.find(
@@ -66,26 +75,26 @@ class User {
     }
     return false;
   }
+  static async changePassword(user, oldPassword, newPassword) {
+    console.log('oldPassword', oldPassword); // Додано лог
+    console.log('user.password (before compare)', user.password); // Додано лог
 
-  static async changePassword(userId, oldPassword, newPassword) {
-    const user = this.getById(userId);
-    if (!user) {
-      throw new Error('User not found');
-    }
-  
     // Check if the old password matches the current password
-    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    const isMatch = await bcrypt.compare((oldPassword), user.password);
+    console.log('isMatch', isMatch); // Додано лог
+
     if (!isMatch) {
       throw new Error('Incorrect old password');
     }
   
     // Hash the new password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
+    console.log('hashedPassword', hashedPassword); // Додано лог
   
     // Change the password
     user.password = hashedPassword;
-  }
-  
+    console.log('user.password (after change)', user.password); // Додано лог
+}
 
   // Credit the user's account
   credit(amount) {

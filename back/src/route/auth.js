@@ -9,10 +9,8 @@ const bcrypt = require('bcrypt');
 
 //=====================================================
 router.post('/signup', function (req, res) {
-  console.log('Received /signup request with body:', req.body); // Додано лог
-
+ 
   const { email, password} = req.body; 
-
   if (!email || !password ) {
     console.log('Error: Missing email or password'); // Додано лог
     return res.status(400).json({
@@ -21,7 +19,6 @@ router.post('/signup', function (req, res) {
   }
 
   try {
-    const hashPassword = bcrypt.hashSync(password, 10);
     const user = User.getByEmail(email);
     if (user) {
       return res.status(400).json({
@@ -29,7 +26,7 @@ router.post('/signup', function (req, res) {
       });
     }
 
-    const newUser = User.create({ email, password:hashPassword, role: User.USER_ROLE.USER}); 
+    const newUser = User.create({ email, password, role: User.USER_ROLE.USER}); 
     const confirm = Confirm.create(newUser.email);
     console.log('confirm', confirm);
     const session = Session.create(newUser);
@@ -51,32 +48,28 @@ router.post('/signup', function (req, res) {
 //====================================================================
 // Встановлюємо маршрут для POST запиту на '/signin'
 router.post('/signin', async function (req, res) {
-  console.log('Received /signin request with body:', req.body); // Логування тіла запиту
-
-  // Витягуємо email та password з тіла запиту
   const { email, password } = req.body;
-
   // Перевіряємо, чи були email і password надані
+  console.log('signin', email, password)
+
   if (!email || !password) {
     console.log('Error: Missing email or password');
     return res.status(400).json({ message: "Помилка. Обов'язкові поля відсутні" });
   }
 
   try {
-    console.log(`Attempting to find user by email: ${email}`);
-    const user = User.getByEmail(email);
-    console.log('User found password:', user.password);
-    
+    const user = User.getByEmail(email)
+    console.log('user signin', user);
     // Перевіряємо, чи існує користувач з таким email
     if (!user) {
       console.log(`Error: User not found for email: ${email}`);
       return res.status(400).json({ message: 'Помилка. Невірна електронна адреса або пароль' });
     }
-
+    
     // Перевіряємо, чи співпадає пароль
     const isMatch = await bcrypt.compare(password, user.password);
    
-    if (isMatch) {
+    if (!isMatch) {
       console.log(`Error: Password does not match for email: ${email}`);
       return res.status(400).json({ message: 'Помилка. Невірна електронна адреса або пароль' });
     }
@@ -88,8 +81,6 @@ router.post('/signin', async function (req, res) {
       console.log('Error: Session not found');
       return res.status(404).json({ message: 'Сесія не знайдена. Авторизуйтеся знову' });
     }
-
-    console.log(`User ${email} authenticated successfully`);
     return res.status(200).json({
       message: 'Користувач успішно авторизований',
       session: {
@@ -235,31 +226,59 @@ router.post('/recovery-confirm', function (req, res) {
 );
 //=====================================================
 router.post('/change-password', async (req, res) => {
-  const { oldPassword, newPassword } = req.body;
-  const token = req.headers.authorization.split(' ')[1]; // Extract the token from the Authorization header
-  const session = Session.getSession(token); // Get the session using the token
-  const userId = session.user.userId; // Get the userId from the session
+  const { email, oldPassword, newPassword } = req.body;
+  if ( !oldPassword || !newPassword) {
+    return res.status(400).json({
+      message: "Помилка. Обов'язкові поля відсутні",
+    });
+  }
   try {
-    const user = User.getById(userId); // Get the user by userId
+    // Retrieve the user based on email
+    const user = User.getByEmail(email);
     if (!user) {
-      throw new Error('User not found');
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    // Check if the old password matches the current password
-    const isMatch = await bcrypt.compare(oldPassword, user.password);
-    if (!isMatch) {
-      throw new Error('Incorrect old password');
-    }
+    // If the old password matches, update to the new password
+    await User.changePassword(user, oldPassword, newPassword);
 
-    // Hash the new password
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-    // Change the password
-    User.changePassword(userId, oldPassword, hashedPassword);
-
-    res.json({ message: 'Password successfully changed' });
+    res.status(200).json({ message: 'Password successfully updated' });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.error('Failed to update password:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+//=====================================================
+router.post('/change-email', async (req, res) => {
+  const { email, newEmail, password } = req.body;
+  if (!newEmail || !password) {
+    return res.status(400).json({
+      message: "Помилка. Обов'язкові поля відсутні",
+    });
+  }
+  try {
+    // Retrieve the user based on email
+    const user = User.getByEmail(email);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // If the password matches, update to the new email
+     User.changeEmail(user, newEmail);
+    const userChangeEmail = User.getByEmail(newEmail);
+
+    console.log('userChangeEmail', userChangeEmail);
+    // Update the session with the new email
+    Session.update(email, { email: newEmail });
+
+    
+
+
+
+    res.status(200).json({ message: 'Email successfully updated' });
+  } catch (error) {
+    console.error('Failed to update email:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
