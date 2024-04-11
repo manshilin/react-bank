@@ -1,8 +1,11 @@
 // front/src/page/notificationsPage/index.js
 import React from 'react';
+import HeaderTimeWifi from '../../component/headerTimeWifi';
+import BackArrow from '../../component/arrow-back';
 
 // NotificationsPage component
 function NotificationsPage() {
+  
   // Mock data for notifications (replace with actual notifications data)
   const notifications = [
     { id: 1, action: 'Вхід в акаунт', timestamp: new Date() },
@@ -14,8 +17,13 @@ function NotificationsPage() {
   ];
 
   return (
-    <div>
-      <h1>Notifications</h1>
+    <main>
+  
+      <HeaderTimeWifi color="black" />
+      
+        <BackArrow title="Notifications" layout="row"/>
+        
+      
       <ul>
         {notifications.map(notification => (
           <li key={notification.id}>
@@ -23,8 +31,9 @@ function NotificationsPage() {
           </li>
         ))}
       </ul>
-    </div>
-  );
+
+    </main>
+ );
 }
 
 export default NotificationsPage;

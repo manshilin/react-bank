@@ -10,9 +10,14 @@ const container = document.getElementById('root')!; // Use the non-null assertio
 const root = createRoot(container); // Now TypeScript knows container is not null
 
 root.render(
-  
-    <AuthProvider>
+  <div className='app-container'>
+    
+      <AuthProvider>
       <App />
     </AuthProvider>
 
+  
+     
+  </div>
+   
 );

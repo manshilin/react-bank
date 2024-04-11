@@ -5,6 +5,7 @@ import { useAuth } from "../../context/authContext";
 import "./index.css";
 import HeaderTimeWifi from "../../component/headerTimeWifi";
 import Button from "../../component/button";
+import BackArrow from "../../component/arrow-back";
 
 const SignupPage = () => {
   const { signup } = useAuth();
@@ -31,7 +32,7 @@ const SignupPage = () => {
   return (
     <main>
       <HeaderTimeWifi color="black" />
-      <h1 className="h1title">Sign Up</h1>
+      <BackArrow title="Sign up" layout="column"/>
       <p className="pdescribe">Select login method</p>
       <form onSubmit={handleSignup}>
         <label htmlFor="email">Email</label>

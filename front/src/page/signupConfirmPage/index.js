@@ -5,6 +5,7 @@ import { AuthContext } from '../../context/authContext'; // Імпортуйте
 import './index.css';
 import HeaderTimeWifi from '../../component/headerTimeWifi';
 import Button from '../../component/button';
+import BackArrow from '../../component/arrow-back';
 
 function SignupConfirmPage() {
   const [confirmationCode, setConfirmationCode] = useState('');
@@ -35,7 +36,7 @@ function SignupConfirmPage() {
   return (
     <main>
     <HeaderTimeWifi color="black"/>
-      <h1 className="h1title">Confirm Signup</h1>
+      <BackArrow title="Confirm account" layout="column"/>
       <p className="pdescribe">Write the code you received</p>
       <form>
         <label htmlFor="confirmationCode">Code</label>

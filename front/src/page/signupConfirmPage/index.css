@@ -1,12 +1,4 @@
 
-.h1title {
-    color: var(--100, #121212);
-    font-family: Jost;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 100%; /* 24px */
-}
  
 .pdescribe {
     color: var(--Grey-text, #939199);
@@ -18,8 +10,6 @@
     line-height: 100%; /* 14px */
 
 }
-
-
 
 form {
     display: flex;

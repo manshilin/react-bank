@@ -1,16 +1,7 @@
 
 
-.h1title {
-    color: var(--100, #121212);
-    font-family: Jost;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 100%; /* 24px */
-}
-
 .pdescribe {
-    color: var(--Grey-text, #939199);
+    color:  #939199;
     text-align: center;
     font-family: Jost;
     font-size: 14px;
@@ -48,4 +39,25 @@ button {
     font-style: normal;
     font-weight: 500;
     line-height: 100%; /* 16px */
+}
+
+.forgotPassword {
+    display: flex;
+    justify-content: left;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+
+    color: var(--Grey-text, #939199);
+    font-family: Jost;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 100%; /* 14px */
+}
+
+a {
+    color:  #ffffff;
+    font-weight: 700;
+    font-family: Jost;
 }

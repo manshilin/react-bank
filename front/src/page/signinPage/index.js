@@ -4,12 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/authContext';
 import HeaderTimeWifi from '../../component/headerTimeWifi';
 import Button from '../../component/button';
+import BackArrow from '../../component/arrow-back';
 
 function SigninPage() {
     const { user, token, signin } = useContext(AuthContext);
     const [formData, setFormData] = useState({ email: '', password: '' });
     const navigate = useNavigate();
-  
+ 
     useEffect(() => {
       if (user && !user.confirm) {
         navigate('/signup-confirm');
@@ -32,13 +33,12 @@ function SigninPage() {
         console.error('Error signing in');
       }
     };
-    
-    
-  
     return (
         <main>
           <HeaderTimeWifi color="black"/>
-            <h1 className="h1title">Sign in</h1>
+          
+          <BackArrow title="Sign in" layout="column"/>
+  
             <p className="pdescribe">Select login method</p>
             <form>
                 <label htmlFor="email">Email</label>
@@ -63,11 +63,16 @@ function SigninPage() {
                         }))
                     }
                 />
+                
             </form>
+            <div className='forgotPassword' >
+            <p>Forgot your password? <a href="/recovery">Restore</a></p>
+            </div>
+            
             <Button text="Continue" type="primary" onClick={handleSignin} />
+
         </main>
     );
 }
-
 export default SigninPage;
 

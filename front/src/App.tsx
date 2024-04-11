@@ -45,7 +45,7 @@ function App() {
     
       <AuthProvider> 
         <BrowserRouter>
-        <div className='app-container'>
+        
         
           <Routes>
             <Route path="/" element={ <AuthRoute element={<WellcomePage />}/>}/>
@@ -62,7 +62,7 @@ function App() {
             <Route path="/transaction/:transactionId" element={<PrivateRoute element={<TransactionPage />} />} />
             <Route path="*" element={<Error />} />
           </Routes>
-          </div>
+    
         </BrowserRouter>
       </AuthProvider>
     

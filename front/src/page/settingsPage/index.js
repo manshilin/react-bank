@@ -108,12 +108,9 @@ function SettingsPage() {
   };
   return (
     <main>
-      <HeaderTimeWifi color="black" />
-      <div className="headerSetting">
-        <BackArrow />
-        <h1>Settings</h1>
-      </div>
-
+      <HeaderTimeWifi color="black" />   
+      <BackArrow title="Settings" layout="row" />
+        
       <div className='blockEmail'>
         <h2>Change Email</h2>
         <label>New Email</label>
